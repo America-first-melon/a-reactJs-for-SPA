@@ -1,0 +1,108 @@
+.html-wrap{
+    position:absolute;
+    background-size: cover;
+    background-repeat: no-repeat; 
+}
+.content-wrap{
+    position: absolute;
+    top: 44px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: auto;
+}
+.content {
+    background-image: url(../images/info-rules.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 96%;
+    height: 10.3rem;
+    margin: 1rem auto;
+}
+.content .card{
+    padding: 0 1rem;
+}
+.content .card ul{
+    margin: 0;
+    padding: 1.6rem 0 0 0;
+    list-style: none;
+    position: relative;
+}
+.content .card ul li{
+    line-height: .9rem;
+    font-size: .35rem;
+}
+.content .card ul li img{
+    width: .5rem;
+    height: .5rem;
+    margin-right: .2rem;
+    vertical-align: middle;
+}
+.content .card ul .content-tip{
+    position: absolute;
+    left: .7rem;
+    bottom: -.55rem;
+    font-size: .3rem;
+}
+
+.content .card-add{
+    position: relative;
+    margin: 1.2rem 0 0 0;
+}
+.content .card-add .card-title{
+    width: .4rem;
+    font-size: .4rem;
+    word-wrap: break-word; 
+    position: absolute;
+    top: .2rem;
+    left: .5rem;
+    color: #fa5b82;
+}
+.content .card-add ul{
+    height: 3.2rem;
+    overflow-y: scroll;
+    padding: 0;
+}
+.content .card-add ul li{
+    margin-left: .2rem;
+    overflow: hidden;
+    border-bottom: 1px solid #3d7295;
+}
+.content .card-add ul li.special-li{
+    overflow: hidden;
+    line-height:.6rem;
+}
+.content .card-add ul li.special-li>img{
+    float: left;
+    margin-top: .3rem;
+}
+.content .card-add ul li.special-li .special-li-div{
+    float: left;
+    text-align: center;
+}
+.content .card-add ul li .left{
+    width: 20%;
+    float: left;
+}
+.content .card-add ul li .right{
+    width: 80%;
+    float: left;
+    text-align: left;
+}
+.special-color{
+    color: #ff5d83;
+}
+.content-copyright{
+    margin: .9rem 0 0 .7rem;
+    color: #7c9fbd;
+    font-size: .35rem;
+}
+.btn-flex{
+    display: flex;
+    justify-content: space-around;
+}
+.router-common{
+    display: block;
+    text-decoration: none;
+    color: #fff;
+}
