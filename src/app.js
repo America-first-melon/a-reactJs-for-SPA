@@ -36,7 +36,8 @@ export default class App extends Component{
                     <Route exact path='/' component={Info} />
                     <Route path='/index' component={Canvas} />
                     <Route path='/score' component={Score} />
-                    <Route path='/list' component={List} />
+                    <Route path='/list' render={({history,loaction,match})=><List />} />
+                    {/*<Route path='/list' component={List} />*/}
                 </Switch>
             </div>
         )
