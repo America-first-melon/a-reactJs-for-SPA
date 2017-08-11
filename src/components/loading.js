@@ -9,7 +9,7 @@ export default class Loading extends Component{
         return (
             <div className="common-pos loading-wrap">
                 <div className="common-pos loading-img">
-                    <img src={LoadingGif} />
+                    <img src={LoadingGif} alt="loading"/>
                 </div>
             </div>
         )

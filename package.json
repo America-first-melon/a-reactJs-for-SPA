@@ -18,7 +18,7 @@
   },
   "proxy":{
     "/chuopp":{
-      "target":"http://admin.dev.m1ap.org:8186" //test地址
+      "target":"http://admin.dev.m1ap.org:8186" 
     }
   }
 }

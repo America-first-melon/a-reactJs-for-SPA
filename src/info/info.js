@@ -7,7 +7,7 @@ import {
   Link
 } from 'react-router-dom';
 
-import 'whatwg-fetch';
+import {post} from '../config/fetch';
 
 import Header from '../components/header';
 import Button from '../components/button';
@@ -31,25 +31,18 @@ class Info extends Component {
     constructor(props){
         super(props);
         this.state={
-            isMount : false
+            isMount : false,
+            isOver :false
         }
+    }
+    renderAlert(){
+        alert(12)
     }
     componentWillMount(){
         this.setState({
             isMount : true
         });
-        fetch('/chuopp/getgameconfig', {
-            method: "POST",
-            body: JSON.stringify({user_id:15499}),
-            headers: {
-                "Content-Type": "application/json"
-            },
-            credentials: "same-origin"
-        }).then(function(response) {
-            return response.text()
-        }, function(error) {
-            error.message //=> String
-        })
+        post('/getgameconfig',{user_id:15499})
     }
     renderMainContent(){
         return(
@@ -99,7 +92,11 @@ class Info extends Component {
 
                     <div className="btn-flex">
                         <Link to='/list' className="router-common" style={{width:'40%'}}>
-                            <Button padColor={{background: 'linear-gradient(#fa94a9, #eb4863)'}} innerColor={{background: '#f65c82'}} name="获奖名单" />
+                            <Button
+                                padColor={{background: 'linear-gradient(#fa94a9, #eb4863)'}}
+                                innerColor={{background: '#f65c82'}}
+                                name="获奖名单"
+                            />
                         </Link>
                         <Link to='/score' className="router-common" style={{width:'40%'}}>
                             <Button padColor={{background: 'linear-gradient(#79e0cf, #49b675)'}} innerColor={{background: '#2eceb4'}} name="我的成绩" path='/score'/>
