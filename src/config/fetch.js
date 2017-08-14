@@ -16,7 +16,12 @@ export function  get(url,params) {
     }
     return fetch(url)
         .then(function(response) {
-            return response.text()
+            if(response.status === 200){
+                return response.json()
+            }else{
+                alert(response.status+'  '+response.statusText);
+                return false;
+            }
         }, function(error) {
             console.log(error)
         })
@@ -35,7 +40,8 @@ export function post (url,data) {
             if(response.status === 200){
                 return response.json()
             }else{
-                alert(response.status);
+                alert(response.status+'  '+response.statusText);
+                return false;
             }
         }, function(error) {
             console.log(error)
