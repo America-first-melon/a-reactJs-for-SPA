@@ -8,9 +8,17 @@ import Info from './info/info';
 import Canvas from './info/canvas';
 import Score from './info/score';
 import List from './info/list';
+import Alert from './info/alert';
 
 export default class App extends Component{
-    componentDidMount(){
+    previousLocation = this.props.location;
+    componentWillUpdate(nextProps) {
+        const { location } = this.props
+        if (nextProps.history.action !== 'POP' && (!location.state || !location.state.modal)) {
+            this.previousLocation = this.props.location
+        }
+    }
+    mponentDidMount(location){
         console.log('\n' +
             '              ,,,,,,\n' +
             '          o#\'9MMHb\':\'-,o,\n' +
@@ -27,18 +35,26 @@ export default class App extends Component{
             '    \'    :MM             .- ,\n' +
             '     \'.   `#?..  .       ..\'\n' +
             '        -.   .         .-\n' +
-            '          \'\'-.oo,oo.-\'\'')
+            '          \'\'-.oo,oo.-\'\'');
+
+            // console.log(location)
     };
     render(){
+        const { location } = this.props
+        const isModal = !!(
+            location.state &&
+            location.state.modal &&
+            this.previousLocation !== location // not initial render
+        )
         return(
             <div>
-                <Switch>
+                <Switch location={isModal ? this.previousLocation : location}>
                     <Route exact path='/' component={Info} />
                     <Route path='/index' component={Canvas} />
                     <Route path='/score' component={Score} />
-                    <Route path='/list' render={({history,loaction,match})=><List />} />
-                    {/*<Route path='/list' component={List} />*/}
+                    <Route path='/list' component={List} />
                 </Switch>
+                {isModal ? <Route path='/alert' component={Alert} /> : null}
             </div>
         )
     }

@@ -81,3 +81,34 @@ html, body {
     right:0;
     bottom:0;
 }
+.content-list li{
+    display:flex;
+    align-items:center;
+    justify-content: space-around;
+    font-size: .3rem;
+    border-bottom: 1px solid #ececec;
+    overflow: hidden;
+    line-height:.8rem;
+}
+.content-list li img{
+    width:.5rem;
+    height:.5rem;
+    border-radius:50%;
+}
+.content-list li span{
+    display: block;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.span1{
+    width:.5rem;
+}
+.span2{
+    width:20%;
+}
+.span35{
+    width:35%;
+}
+

@@ -1,0 +1,21 @@
+.alert-common{
+    position: absolute;
+    width: 8rem;
+    height: 5.6267rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: auto;
+}
+.alert-close{
+    position: absolute;
+    width: .8rem;
+    height: .8rem;
+    right: -.2rem;
+    top: -.2rem;
+}
+.alert-content {
+    padding: 1.6rem .7rem;
+    line-height: 2rem;
+    font-size: .5rem;
+    text-align: center;
+}

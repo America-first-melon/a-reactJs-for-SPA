@@ -18,7 +18,7 @@ export function  get(url,params) {
         .then(function(response) {
             return response.text()
         }, function(error) {
-            error.message //=> String
+            console.log(error)
         })
 };
 
@@ -32,9 +32,13 @@ export function post (url,data) {
             },
             body:JSON.stringify(data)
         }).then(function(response) {
-            return response.text()
+            if(response.status === 200){
+                return response.json()
+            }else{
+                alert(response.status);
+            }
         }, function(error) {
-            error.message //=> String
+            console.log(error)
      })
 };
 
