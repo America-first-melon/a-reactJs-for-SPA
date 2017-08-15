@@ -6,14 +6,14 @@ import './alert.css';
 import Bg from '../images/alert3.png';
 import Xbtn from '../images/close.png';
 
+
 const alertBgStyle = {
     backgroundImage: 'url('+Bg+')'
 }
 
 export default class Alert extends Component{
     back = (e) => {
-        e.stopPropagation()
-        this.props.history.goBack()
+        this.props.location.state.updateUrl ? window.location.href = "http://m.maopp.cn" : (()=>{e.stopPropagation() ; this.props.history.goBack()})();
     }
     render(){
         return(

@@ -1,7 +1,7 @@
 import React , {Component} from 'react';
 import {
   Switch,
-  Route,
+  Route
 } from 'react-router-dom';
 
 import Info from './info/info';
@@ -9,6 +9,7 @@ import Canvas from './info/canvas';
 import Score from './info/score';
 import List from './info/list';
 import Alert from './info/alert';
+import Modal from './info/modal';
 
 export default class App extends Component{
     previousLocation = this.props.location;
@@ -49,12 +50,13 @@ export default class App extends Component{
         return(
             <div>
                 <Switch location={isModal ? this.previousLocation : location}>
-                    <Route exact path='/' component={Info} />
+                    <Route exact path='/' component={Info}/>
                     <Route path='/index' component={Canvas} />
                     <Route path='/score' component={Score} />
                     <Route path='/list' component={List} />
                 </Switch>
-                {isModal ? <Route path='/alert' component={Alert} /> : null}
+                {/*{isModal ? <Route path='/alert' component={Alert} /> : null}*/}
+                {!isModal ? null : (()=>(<div><Route path='/alert' component={Alert} /><Route path='/modal' component={Modal} /></div>))()}
             </div>
         )
     }

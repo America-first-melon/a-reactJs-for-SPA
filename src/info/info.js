@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 
 import {
-  Link
+  Link,
 } from 'react-router-dom';
 
 import {post} from '../config/fetch';
@@ -31,30 +31,35 @@ class Info extends Component {
     constructor(props){
         super(props);
         this.state={
-            isMount : false,
             isOver :false,
-            endTime : ''
+            endTime : '',
+            userParams:[]
         }
     }
     componentWillMount(){
-        post('/getgameconfig',{user_id:new URLSearchParams(this.props.location.search).get('user_id')}).then(
-            (Response)=>{
-                this.setState({
-                    endTime:Response.game_end_time
-                });
-                let endTimeStramp = new Date(Response.game_end_time).getTime(),
-                    nowTimeStramp = new Date().getTime();
-                nowTimeStramp > endTimeStramp && this.setState({isOver:true});
-                // nowTimeStramp > endTimeStramp && this.setState({isOver:false}); //显示alert出中奖时间，用于游戏未结束
-                console.log(this.state.isOver)
-            }
-        ).then(this.setState({
-            isMount : true,
-        }))
+        let param = new URLSearchParams(this.props.location.search).get('user_id');
+        if(param === null){
+            this.props.history.replace({pathname:'/alert',search:this.props.location.search,state: { modal: true,content:`参数错误。请升级App重试`,updateUrl:1 }})
+        }else{
+            post('/getgameconfig',{user_id:param}).then(
+                (Response)=>{
+                    this.setState({
+                        endTime:Response.game_end_time,
+                        userParams:Response
+                    });
+                    let endTimeStramp = new Date(Response.game_end_time).getTime(),
+                        nowTimeStramp = new Date().getTime();
+                    // nowTimeStramp > endTimeStramp && this.setState({isOver:true});
+                    nowTimeStramp > endTimeStramp && this.setState({isOver:false}); //显示alert出中奖时间，用于游戏未结束
+                    // console.log(this.state.isOver)
+                }
+            )
+        }
     }
     renderMainContent(){
         let searchUrl = this.props.location.search;
         return(
+        <div>
             <div className="common-pos html-wrap" style={infoBgStyle}>
                 <Header title="游戏介绍"/>
                 <div className="content-wrap">
@@ -95,7 +100,9 @@ class Info extends Component {
                             </ul>
                         </div>
                     </div>
-                    <Link to='/index' className="router-common">
+                    <Link to={this.state.isOver ? {pathname:'/index',search:searchUrl,state:{isOver:1,userParams:this.state.userParams}} : {pathname:'/index',search:searchUrl,state:{isOver:0,userParams:this.state.userParams}}} 
+                          className="router-common"
+                    >
                         <Button  wrapColor={{width:'60%'}} padColor={{border: '1px solid #fddb3d'}}  name="进入游戏"/>
                     </Link>
 
@@ -109,12 +116,15 @@ class Info extends Component {
                                 name="获奖名单"
                             />
                         </Link>
-                        <Link to={{pathname:'/score',search:searchUrl}} className="router-common" style={{width:'40%'}}>   
+                        <Link to={this.state.isOver ? {pathname:'/score/per',search:searchUrl,state:{isOver:1}} : {pathname:'/score/all',search:searchUrl,state:{isOver:0}}} 
+                              className="router-common" style={{width:'40%'}}
+                        >   
                             <Button padColor={{background: 'linear-gradient(#79e0cf, #49b675)'}} innerColor={{background: '#2eceb4'}} name="我的成绩" path='/score'/>
                         </Link>
                     </div>
                 </div>
             </div>
+        </div>
         )
     }
     renderLoadingGif(){
@@ -124,7 +134,8 @@ class Info extends Component {
     }
   render() {
     return (
-        this.state.isMount ? this.renderMainContent() : this.renderLoadingGif()
+        // this.state.isMount ? this.renderMainContent() : this.renderLoadingGif()
+        this.renderMainContent()
     );
   }
 }

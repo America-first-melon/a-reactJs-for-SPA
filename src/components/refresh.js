@@ -16,22 +16,34 @@ export default class RanksListComponent extends Component{
         this.scrollFunc = this.scrollFunc.bind(this)
     }
     fetchRankList(pageNum){    
+        console.log(this.props.special == true)
         post(this.props.fetch,{pageIndex: pageNum, pageSize: 11}).then(
             (Response)=>{
                 this.setState({rowCount:Response.rowCount})
 
                 let tempArray = this.state.ranksList;
 
-                if(pageNum == 0){
-                    this.setState({
-                        ranksList:Response.data,
-                    });
+                if(pageNum === 0){
+                    if(this.props.special == 1){
+                        this.setState({
+                            ranksList:Response.data[0],
+                        });
+                    }else{
+                        this.setState({
+                            ranksList:Response.data,
+                        });
+                    }
                 }else{
-                    this.setState({
-                        ranksList:tempArray.concat(Response.data),
-                    });
+                    if(this.props.special == 1){
+                        this.setState({
+                            ranksList:tempArray.concat(Response.data[0]),
+                        });
+                    }else{
+                        this.setState({
+                            ranksList:tempArray.concat(Response.data),
+                        });
+                    }
                 }
-                
             }
         )
     }
@@ -90,7 +102,7 @@ class RanksItemComponent extends Component{
         return(
              <li>
                  {this.renderIndex()}
-                 <img src={this.props.ele.avator == null ? 'http://www.maopp.cn/imgs/maopao_logo.png' : this.props.ele.avator}/>
+                 <img src={this.props.ele.avator == null ? 'http://www.maopp.cn/imgs/maopao_logo.png' : this.props.ele.avator} alt='avator'/>
                  <span className="span35">{this.props.ele.user_name == null ? '测试用户' : this.props.ele.user_name}</span>
                  <span className="span2">{this.props.ele.use_milsecond/1000}秒</span>
              </li>

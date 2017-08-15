@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 
 import Header from '../components/header';
-import Loading from '../components/loading';
 import RanksListComponent from '../components/refresh';
-import {post} from '../config/fetch';
 
 import './list.css';
 

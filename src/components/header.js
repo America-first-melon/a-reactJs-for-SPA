@@ -16,7 +16,7 @@ export default class Header extends Component{
         return(
             <Route render={
                 ({history})=>(
-                    <div className="header-icon" onClick={(e)=>{ e.stopPropagation();history.goBack()}}></div>
+                    <div className="header-icon" onClick={(e)=>{console.log(history); e.stopPropagation();history.goBack()}}></div>
                 )}
             />
         )
