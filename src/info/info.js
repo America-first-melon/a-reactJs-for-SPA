@@ -1,5 +1,5 @@
 /**
- * created Carmelo Anthony
+ * created Carmelo Anthony 2017-07
  */
 import React, { Component } from 'react';
 
@@ -49,7 +49,7 @@ class Info extends Component {
                     });
                     let endTimeStramp = new Date(Response.game_end_time).getTime(),
                         nowTimeStramp = new Date().getTime();
-                    // nowTimeStramp > endTimeStramp && this.setState({isOver:true});
+                    // nowTimeStramp > endTimeStramp && this.setState({isOver:true}); //用于游戏结束
                     nowTimeStramp > endTimeStramp && this.setState({isOver:false}); //显示alert出中奖时间，用于游戏未结束
                     // console.log(this.state.isOver)
                 }

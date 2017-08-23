@@ -28,7 +28,7 @@ export default class App extends Component{
             '    ,MMM\'          "HLbd< ?&H\\\n' +
             '   .:MH ."\\          ` MM  MM&b\n' +
             '  . "*H    -        &bycarmeloM:\n' +
-            '  .    dboo        MMMMMMMMMMMM.\n' +
+            '  .    dboo        MMM2017-07-nM.\n' +
             '  .   dMMMMMMb      *MMMMMMMMMP.\n' +
             '  .    MMMMMMMP        *MMMMMP .\n' +
             '       `#MMMMM           MM6P ,\n' +
