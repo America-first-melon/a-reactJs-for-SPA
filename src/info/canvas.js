@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 
+import md5 from 'js-md5'
+
 import Header from '../components/header';
 
 import {post} from '../config/fetch';
-import {TimeComponent,startTime} from '../components/clock';
+import {TimeComponent,startTime,getTime,getNowFormatDate} from '../components/clock';
 import {CountComponent} from '../components/count';
 
+import {width,height,oImage,imgPreload} from '../config/core';
 
 import './canvas.css';
 
@@ -14,44 +17,11 @@ import Bg from '../images/bg.jpg';
 import Music from '../static/audio-long.mp3';
 import Tap from '../static/audio-tap.mp3';
 
-import pao0 from '../images/paopao/pao0.png';
-import pao1 from '../images/paopao/pao1.png';
-import pao2 from '../images/paopao/pao2.png';
-import pao3 from '../images/paopao/pao3.png';
-import pao4 from '../images/paopao/pao4.png';
-import pao5 from '../images/paopao/pao5.png';
-import pao6 from '../images/paopao/pao6.png';
-import pao7 from '../images/paopao/pao7.png';
-import pao8 from '../images/paopao/pao8.png';
-import pao9 from '../images/paopao/pao9.png';
-
-
 const infoBgStyle = {
     backgroundImage: 'url('+Bg+')'
 }
 
-let  canvasDom,
-      ctx;
-    const   width = document.documentElement.clientWidth,
-      height = document.documentElement.clientHeight;
-
-const oImage = {
-    "pao0":pao0,
-    "pao1":pao1,
-    "pao2":pao2,
-    "pao3":pao3,
-    "pao4":pao4,
-    "pao5":pao5,
-    "pao6":pao6,
-    "pao7":pao7,
-    "pao8":pao8,
-    "pao9":pao9
-}
-
-const maopaoCanvas = {
-    width:width,
-    height:height
-}
+let canvasDom,ctx;
 
 let circle,
     paoShow,
@@ -62,32 +32,10 @@ let circle,
     upIngFunc,dropList = [],
     paoAxes = {};
 
- //初始泡泡
-function imgPreload(srcs,callback){
-    let count = 0,imgNum = 0,images = {};
-    for(let src in srcs){
-        imgNum++;
-    };
-    for(let src in srcs ){
-        images[src] = new Image();
-        images[src].onload = function(){
-            //判断是否所有的图片都预加载完成
-            if (++count >= imgNum){
-                callback(images);
-            }
-        }
-        images[src].src = srcs[src];
-    }
-};
-
  //1000/60定时器
 function refreshConsFunc(callback){
-    // this.setState({
-    //     upIngFunc:setTimeout(callback,1000/60)
-    // })
     upIngFunc = setTimeout(callback,1000/60);
 };
-
 
 //造坐标
 function createAxes(length){
@@ -99,78 +47,33 @@ function createAxes(length){
     return axeaArray;
 }
 
-    //造泡泡
+//造泡泡
 function createCircle(x, y) {
-    // 0.5 -  0.7  正负
-    // 0到9的随机数
-    let randomImgIndex = Math.ceil( Math.random() * 10 ) - 1;
-    this.hbol = true;
-    this.wbol = true;
+    var randomImgIndex = Math.ceil( Math.random() * 10 ) - 1;
     this.x = x;
     this.y = y;
     this.color = Math.random() * 360;
-    this.xVel = Math.random() * 5 - 2;
     this.render = function(c) {
         c.drawImage(paopaoArray[randomImgIndex],this.x,this.y,50,50)
     };
-    this.sixs = function(){
-        var random= (Math.floor(Math.random() * (9 - 6 + 1)) + 6)/10;  
-        if (random>0.7) {
-            this.hbol = false;  
-            this.wbol = false; 
-        }
-        return random;
-    }
-    this.wspeed = (Math.floor(Math.random() * (9 - 0 + 1)) + 0)/10;
-    this.hspeed = this.sixs()
     this.update = function() {
-        if(this.y-50<=0){
-            this.wspeed = this.sixs()
-            this.hbol = false;
-        }
-        if(this.y+50>=height){
-            this.wspeed = this.sixs()
-            this.hbol = true;
-        }
-        if (this.hbol){
-            this.y -= this.hspeed //，每次上升0.6
-        }else{
-            this.y += this.hspeed
-        }
-        // 左右
-        if(this.x<=0){
-            this.hspeed = this.sixs()
-            this.wbol = false;
-        }
-        if(this.x+50 >= width){
-            this.hspeed = this.sixs()   
-            this.wbol = true;
-        }
-        if (this.wbol){
-            this.x -= this.wspeed
-        }else{
-            this.x += this.wspeed
-        }
+        this.y -= 0.6
     }
 }
 
 //上升
 function circleUping() {
     clearTimeout(upIngFunc);
-    // clearTimeout(this.state.upIngFunc);
-    gameMethods.renderBg(); //请空画布
-
+    gameMethods.renderBg(); 
     if(paoShow){
-        circle.render(ctx); // 随机 造球
-        circle.update();// 球 y 轴变化   往上升
+        circle.render(ctx); 
+        circle.update();
         refreshConsFunc(circleUping);
     }else{
         refreshConsFunc(circleUping);
     }
-    boom.update();//里边有render 和消失
+    boom.update();
 }
-
-
 
 let gameMethods = {
     axes:[
@@ -178,10 +81,9 @@ let gameMethods = {
         {x:200,y:300}
     ],
     getClickLocation:function(x,y){
-        let reatLocation = canvasDom.getBoundingClientRect();
         return{
-            x:(x-reatLocation.left) * (canvasDom.width / reatLocation.width),
-            y:(y-reatLocation.top) * (canvasDom.height / reatLocation.height)  
+            x: x - canvasDom.getBoundingClientRect().left,
+            y: y - canvasDom.getBoundingClientRect().top 
         }
     },
     reset:function(){ 
@@ -201,14 +103,13 @@ let gameMethods = {
     hiddenPao:function(){  
         if(paoShow){ 
             hiddenTimer = setTimeout(function(){
-            paoShow = false;
-            },700)  
+                paoShow = false;
+            },1000)  
         }
     },
     //每一秒执行一次
     gameStart:function(){
         clearTimeout(startTimer); // 清楚 上一次的定时器  执行之后 重新开始计算延迟时间
-                  
         if (!paoShow) {
             gameMethods.reset();// 生出几个随机生出球的位置
             gameMethods.renderPao();// 渲染 泡泡
@@ -216,7 +117,9 @@ let gameMethods = {
             gameMethods.hiddenPao();// 球消失 
         }
                   
-        //startTimer = setTimeout(gameMethods.gameStart(),1000/60); //  正常多久出现出现一个 小球
+        startTimer = setTimeout(function(){
+            gameMethods.gameStart();
+        },1000/60); //  正常多久出现出现一个 小球
     }
 }
 
@@ -241,10 +144,8 @@ let gameMethods = {
             if(dropList.length>0){
                 dropList.forEach(function (e) {
                     e.posx=e.posx+e.vx; // 炸开的泡  每次变化多少e.vx
-    //                            e.vy=e.vy+0.5;
                     e.posy=e.posy+e.vy;//炸开的泡 每次变化多少e.vy
                     if(e.posx>width || e.posx<0 || e.posy<0 || e.posy>height){
-                        // 靠边了     气泡消失掉
                         e.die = true;
                     }
                 });
@@ -269,19 +170,58 @@ let gameMethods = {
     }
 
 
-
 export default class Canvas extends Component{
     constructor(props){
         super(props);
         this.state = {
             userParams : this.props.location.state.userParams,
-            liveNumber : 0
+            liveNumber : 0,
+            clickNum: 0,
+
+            userId:new URLSearchParams(this.props.location.search).get('user_id')
         }
+    }
+
+    tongji = (paoNumber,isStart,useTime,timestamp,callbak) => {
+        let sign = 'user_id='+this.state.userId+
+                '|post_time='+getNowFormatDate()+
+                '|state='+isStart+
+                '|use_time='+useTime+
+                '|pp_number='+paoNumber+
+                '|region=HZ|beginTime='+new Date().getTime()+
+                '|phoneModel='+null+
+                '|timestamp='+timestamp+
+                '|salt='+'MIICXAIBAAKBgQCdW2RsHWN1BxiWky6V4';
+        let jsonData = {
+                post_time:getNowFormatDate(), 
+                pp_number:paoNumber,
+                phoneModel: null,
+                state:isStart,
+                region: "HZ",
+                token: "",
+                salt: 'MIICXAIBAAKBgQCdW2RsHWN1BxiWky6V4',
+                beginTime: new Date().getTime(),
+                sign:md5(sign),
+                timestamp: timestamp,
+                user_id:this.state.userId,
+                use_time:useTime,
+        };
+        post('/addGameRecord',jsonData).then(
+            (res)=>{
+                this.props.history.replace({
+                    pathname:'/alert',
+                    search:this.props.location.search,
+                    state: { 
+                        modal: true,
+                        content:`参数错误，请登陆或升级APP重试。`,
+                        isStart:0
+                    }})
+            }
+        )
     }
     
     componentWillMount(){
-        let param = new URLSearchParams(this.props.location.search).get('user_id');
-        post('/checkgamenumber',{user_id:param}).then(
+        post('/checkgamenumber',{user_id:this.state.userId}).then(
             (Response)=>{
                 this.setState({
                     liveNumber:Response.live_number
@@ -335,14 +275,58 @@ export default class Canvas extends Component{
     componentDidMount(){
         canvasDom = document.getElementById("ppCanvas");
         ctx = canvasDom.getContext('2d');
-        
     }
-    componentDidUpdate(){
-        if(this.props.location.state.isStart){
+
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps)
+        if(nextProps.history.location.state.isStart){
             startTime();
             gameMethods.gameStart();
         }
     }
+
+   
+
+    canvasClickFunc = (event) =>{
+        let _this = this;
+        event.preventDefault();
+
+        let locationAxes = gameMethods.getClickLocation(event.clientX, event.clientY);
+
+        if(paoShow && (locationAxes.x > circle.x) && (locationAxes.x < circle.x + 50) &&  (locationAxes.y>circle.y) && (locationAxes.y < circle.y+50)  ){
+            let locationColoArray = ctx.getImageData(locationAxes.x,locationAxes.y,1,1).data;
+            let locationColor = 'rgba('+locationColoArray[0]+','+locationColoArray[1]+','+locationColoArray[2]+',255)';
+            paoShow = false;
+
+            clearTimeout(hiddenTimer); // 球球被点了 清除掉 hiddenPao  定时器
+            
+            for(var i=0;i<6;i++){
+                dropList.push(boom.createDrop(event.clientX,event.clientY,locationColor));
+            };
+            
+            this.setState({
+                clickNum : this.state.clickNum+1
+            },function(){
+                if(this.state.clickNum == 3){
+                    this.tongji(50,1,Number(document.getElementById("countTime").innerText*1000),new Date().getTime())
+                    
+                    getTime();
+                    clearTimeout(startTimer); //清掉 开始定时器 （查询 球 状态的定时器）
+                    clearTimeout(upIngFunc); // 清掉   更新画布定时器
+                    dropList = []
+                    gameMethods.renderBg();// 清空画布
+
+                    
+                }   
+            })
+                      // 延时1秒在开始
+            // clearTimeout(startTimer);
+
+            
+        }
+        
+    }
+
 
     render(){
         return(
@@ -351,13 +335,14 @@ export default class Canvas extends Component{
                 <audio src={Music} loop id="long-bg"></audio>
                 <audio src={Tap} id="tap-audio"></audio>
                 <div className="canvas-count-wrap">
-                    <CountComponent avatar={this.state.userParams.avatar}/>
+                    <CountComponent clickNum={this.state.clickNum} avatar={this.state.userParams.avatar}/>
                     <TimeComponent />
                 </div>
-
-
-                <canvas style={maopaoCanvas} id="ppCanvas" ref='ttttt'></canvas>
+                <canvas className="maopaoCanvas" width={width} height={height} id="ppCanvas" onClick={this.canvasClickFunc}></canvas>
             </div>
         )
     }
+
+
+    
 }

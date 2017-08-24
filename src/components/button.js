@@ -6,9 +6,7 @@ export default class Button extends Component{
     constructor(props){
         super(props)
     }
-    componentWillMount(){
-        console.log(this.props)
-    }
+    
     render(){
         return(
             <div style={this.props.wrapColor} className="btn-mar">

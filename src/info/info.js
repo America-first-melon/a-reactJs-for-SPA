@@ -39,7 +39,7 @@ class Info extends Component {
     componentWillMount(){
         let param = new URLSearchParams(this.props.location.search).get('user_id');
         if(param === null){
-            this.props.history.replace({pathname:'/alert',search:this.props.location.search,state: { modal: true,content:`参数错误。请升级App重试`,updateUrl:1 }})
+            this.props.history.replace({pathname:'/alert',search:this.props.location.search,state: { modal: true,content:`参数错误，请登陆或升级APP重试。`,updateUrl:1 }})
         }else{
             post('/getgameconfig',{user_id:param}).then(
                 (Response)=>{

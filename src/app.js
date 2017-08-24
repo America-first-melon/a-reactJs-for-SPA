@@ -38,7 +38,6 @@ export default class App extends Component{
             '        -.   .         .-\n' +
             '          \'\'-.oo,oo.-\'\'');
 
-            // console.log(location)
     };
     render(){
         const { location } = this.props

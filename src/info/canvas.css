@@ -6,5 +6,9 @@
     width: 100%;
 }
 
+.maopaoCanvas  {
+    position:absolute;
+    top:64px;
+}
 
 
