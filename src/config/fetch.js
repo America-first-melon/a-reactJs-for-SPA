@@ -12,7 +12,6 @@ export function  get(url,params) {
             dataStr = dataStr.substr(0, dataStr.lastIndexOf('&'));
             url = ROOT_URL + url + '?' + dataStr
         }
-        console.log('get'+url)
     }
     return fetch(url)
         .then(function(response) {

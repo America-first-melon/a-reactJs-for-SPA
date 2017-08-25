@@ -5,6 +5,7 @@ import './alert.css';
 import {post} from '../config/fetch';
 
 import Button from '../components/button';
+import {getTime} from '../components/clock';
 
 
 /*背景 */
@@ -30,11 +31,13 @@ export default class Modal extends Component{
         }
     }
     back = (e) => {
+        getTime();
         let searchUrl = this.props.location.search;
         e.stopPropagation();
         this.props.history.replace({pathname:'/index',search:searchUrl,state: { modal: false }})
     }
     backAndStart = (e) => {
+        getTime();
         let searchUrl = this.props.location.search;
         e.stopPropagation();
         this.props.history.replace({pathname:'/index',search:searchUrl,state: { modal: false ,isStart:true }})

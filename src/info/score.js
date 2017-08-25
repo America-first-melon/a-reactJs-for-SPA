@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import Header from '../components/header';
-import Button from '../components/button';
 import RanksListComponent from '../components/refresh';
 
 import {

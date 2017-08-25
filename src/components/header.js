@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './header.css';
+import {getTime} from '../components/clock';
 
 import {
     Route,
@@ -16,7 +17,7 @@ export default class Header extends Component{
         return(
             <Route render={
                 ({history})=>(
-                    <div className="header-icon" onClick={(e)=>{console.log(history); e.stopPropagation();history.goBack()}}></div>
+                    <div className="header-icon" onClick={(e)=>{console.log(history); getTime();e.stopPropagation();history.goBack()}}></div>
                 )}
             />
         )

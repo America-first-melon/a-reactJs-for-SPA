@@ -10,5 +10,15 @@
     position:absolute;
     top:64px;
 }
-
+.audio-wrap{
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: .8rem;
+    height: .8rem;
+}
+.audio-wrap>img{
+    width: 100%;
+    height: 100%;
+}
 

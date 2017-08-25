@@ -16,12 +16,14 @@ import './canvas.css';
 import Bg from '../images/bg.jpg';
 import Music from '../static/audio-long.mp3';
 import Tap from '../static/audio-tap.mp3';
+import play from '../images/close-audio.png';
+import pause from '../images/start-audio.png';
 
 const infoBgStyle = {
     backgroundImage: 'url('+Bg+')'
 }
 
-let canvasDom,ctx;
+let canvasDom,ctx,bgAudio,tapAudio;
 
 let circle,
     paoShow,
@@ -58,7 +60,7 @@ function createCircle(x, y) {
         c.drawImage(paopaoArray[randomImgIndex],this.x,this.y,50,50)
     };
     this.update = function() {
-        this.y -= 0.6
+        this.y -= 3
     }
 }
 
@@ -178,8 +180,8 @@ export default class Canvas extends Component{
             userParams : this.props.location.state.userParams,
             liveNumber : 0,
             clickNum: 0,
-
-            userId:new URLSearchParams(this.props.location.search).get('user_id')
+            userId:new URLSearchParams(this.props.location.search).get('user_id'),
+            isAudioStop:true
         }
     }
 
@@ -190,9 +192,9 @@ export default class Canvas extends Component{
                 '|use_time='+useTime+
                 '|pp_number='+paoNumber+
                 '|region=SH|beginTime='+beginTime+
-                '|phoneModel='+'null'+
+                '|phoneModel=null'+
                 '|timestamp='+timestamp+
-                '|salt='+'MIICXAIBAAKBgQCdW2RsHWN1BxiWky6V4';
+                '|salt=MIICXAIBAAKBgQCdW2RsHWN1BxiWky6V4';
         let jsonData = {
                 post_time:getNowFormatDate(), 
                 pp_number:paoNumber,
@@ -270,29 +272,30 @@ export default class Canvas extends Component{
     componentDidMount(){
         canvasDom = document.getElementById("ppCanvas");
         ctx = canvasDom.getContext('2d');
+        bgAudio = document.getElementById("long-bg");
+        tapAudio = document.getElementById("tap-audio");
+        tapAudio.playbackRate = 2;
     }
 
     componentWillReceiveProps(nextProps) {
         console.log(nextProps)
         if(nextProps.history.location.state.isStart){
+            bgAudio.play();
             this.setState({
                 clickNum:0
-            })
+            });
             beginTime = new Date().getTime();
             startTime();
             gameMethods.gameStart();
         }
     }
 
-   
-
     canvasClickFunc = (event) =>{
-        let _this = this;
         event.preventDefault();
-
         let locationAxes = gameMethods.getClickLocation(event.clientX, event.clientY);
-
         if(paoShow && (locationAxes.x > circle.x) && (locationAxes.x < circle.x + 50) &&  (locationAxes.y>circle.y) && (locationAxes.y < circle.y+50)  ){
+            tapAudio.play();
+            tapAudio.currentTime = 0;
             let locationColoArray = ctx.getImageData(locationAxes.x,locationAxes.y,1,1).data;
             let locationColor = 'rgba('+locationColoArray[0]+','+locationColoArray[1]+','+locationColoArray[2]+',255)';
             paoShow = false;
@@ -330,6 +333,13 @@ export default class Canvas extends Component{
         }
     }
 
+    audioClickFunc = () => {
+        this.setState({
+            isAudioStop:!this.state.isAudioStop
+        },function(){
+            this.state.isAudioStop ? bgAudio.play() : bgAudio.pause();
+        })
+    }
 
     render(){
         return(
@@ -342,10 +352,12 @@ export default class Canvas extends Component{
                     <TimeComponent />
                 </div>
                 <canvas className="maopaoCanvas" width={width} height={height} id="ppCanvas" onClick={this.canvasClickFunc}></canvas>
+                <div className="audio-wrap" onClick={this.audioClickFunc}>
+                    {
+                        this.state.isAudioStop ?  <img src={play} /> : <img src={pause} />
+                    }
+                </div>
             </div>
         )
     }
-
-
-    
 }
