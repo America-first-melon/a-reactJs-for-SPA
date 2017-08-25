@@ -41,3 +41,4 @@ export function imgPreload(srcs,callback){
         images[src].src = srcs[src];
     }
 };
+

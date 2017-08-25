@@ -30,7 +30,8 @@ let circle,
     startTimer = null,
     hiddenTimer = null,
     upIngFunc,dropList = [],
-    paoAxes = {};
+    paoAxes = {},
+    beginTime = 0;
 
  //1000/60定时器
 function refreshConsFunc(callback){
@@ -188,34 +189,27 @@ export default class Canvas extends Component{
                 '|state='+isStart+
                 '|use_time='+useTime+
                 '|pp_number='+paoNumber+
-                '|region=HZ|beginTime='+new Date().getTime()+
-                '|phoneModel='+null+
+                '|region=SH|beginTime='+beginTime+
+                '|phoneModel='+'null'+
                 '|timestamp='+timestamp+
                 '|salt='+'MIICXAIBAAKBgQCdW2RsHWN1BxiWky6V4';
         let jsonData = {
                 post_time:getNowFormatDate(), 
                 pp_number:paoNumber,
-                phoneModel: null,
+                phoneModel: "null",
                 state:isStart,
-                region: "HZ",
+                region: "SH",
                 token: "",
                 salt: 'MIICXAIBAAKBgQCdW2RsHWN1BxiWky6V4',
-                beginTime: new Date().getTime(),
-                sign:md5(sign),
+                beginTime: beginTime,
+                sign:md5.hex(sign),
                 timestamp: timestamp,
                 user_id:this.state.userId,
                 use_time:useTime,
         };
         post('/addGameRecord',jsonData).then(
             (res)=>{
-                this.props.history.replace({
-                    pathname:'/alert',
-                    search:this.props.location.search,
-                    state: { 
-                        modal: true,
-                        content:`参数错误，请登陆或升级APP重试。`,
-                        isStart:0
-                    }})
+                res.code = 1 && callbak();
             }
         )
     }
@@ -247,11 +241,12 @@ export default class Canvas extends Component{
                             search:this.props.location.search,
                             state: { 
                                 modal: true,
-                                content:`没机会了`,
+                                content:`今天的三次机会用完了`,
+                                desc:'分享可增加一次次数',
                                 btn:{
                                     text:'去分享',
-                                    padColor:{background:'linear-gradient(#79e0cf,#49b675)'},
-                                    innerColor:{background:'#2eceb4'},
+                                    padColor:{background:'linear-gradient(#fa94a9, #eb4863)'},
+                                    innerColor:{background:'#f65c82'},
                                     clickFunc:2
                                 } 
                             }
@@ -280,6 +275,10 @@ export default class Canvas extends Component{
     componentWillReceiveProps(nextProps) {
         console.log(nextProps)
         if(nextProps.history.location.state.isStart){
+            this.setState({
+                clickNum:0
+            })
+            beginTime = new Date().getTime();
             startTime();
             gameMethods.gameStart();
         }
@@ -308,23 +307,27 @@ export default class Canvas extends Component{
                 clickNum : this.state.clickNum+1
             },function(){
                 if(this.state.clickNum == 3){
-                    this.tongji(50,1,Number(document.getElementById("countTime").innerText*1000),new Date().getTime())
-                    
+                    let _this = this;
                     getTime();
                     clearTimeout(startTimer); //清掉 开始定时器 （查询 球 状态的定时器）
                     clearTimeout(upIngFunc); // 清掉   更新画布定时器
                     dropList = []
                     gameMethods.renderBg();// 清空画布
-
-                    
+                    this.tongji(50,1,Number(document.getElementById("countTime").innerText*1000),new Date().getTime(),function(){
+                        _this.props.history.replace({
+                            pathname:'/modal/score',
+                            search:_this.props.location.search,
+                            state: { 
+                                modal: true,
+                                isShowScore:true,
+                                useTime:Number(document.getElementById("countTime").innerText)
+                            }
+                        })
+                    })
                 }   
             })
-                      // 延时1秒在开始
             // clearTimeout(startTimer);
-
-            
         }
-        
     }
 
 
