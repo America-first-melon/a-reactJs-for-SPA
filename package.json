@@ -20,6 +20,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
+  "homepage" : "https://america-first-melon.github.io/a-reactJs-for-SPA",
   "proxy": {
     "/chuopp": {
       "target": "http://admin.dev.m1ap.org:8186"
