@@ -1,0 +1,18 @@
+.btn-mar{
+    margin: .5rem auto 0 auto;
+    border: 3px solid #fddb3d;
+    border-radius:40px;
+}
+.btn-pad{
+    margin: 3px;
+    padding: 3px;
+    border-radius: 30px;
+}
+.btn-inner{
+    padding: 0.25rem;
+    font-size: .5rem;
+    font-weight: bold;
+    border-radius: 30px;
+    text-align: center;
+    cursor: pointer;
+}

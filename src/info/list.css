@@ -1,0 +1,16 @@
+.content-title{
+    width: 4.7rem;
+    height: 4rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 0 auto;
+}
+.content-title>img{
+    margin-top:1rem;
+}
+#dataList{
+    height: auto;
+    max-height: 8.3rem;
+    overflow-y: scroll;
+    background: rgba(0,0,0,.5);
+}
